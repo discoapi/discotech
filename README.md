@@ -1,4 +1,4 @@
-disco.py
+discotech
 ========
 
-python library to help working with social media providers
+python library to help dealing with everything regarding social media providers
