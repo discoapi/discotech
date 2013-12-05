@@ -5,7 +5,7 @@ from requests_oauthlib import OAuth1
 
 from .provider import Provider
 from .errors import discotechError
-from .ProviderSearcher import ProviderSearcher
+from .providerSearcher import ProviderSearcher
 
 #configurable settings
 http_timeout_seconds = 20
@@ -186,13 +186,11 @@ def filterCharacters(s):
         """
         Strip non printable characters
 
-        @version 2013-07-19
+        @type  s: dict|list|tuple|bytes|string
+        @param s: Object to remove non-printable characters from
 
-        @type  s dict|list|tuple|bytes|string
-        @param s Object to remove non-printable characters from
-
-        @rtype  dict|list|tuple|bytes|string
-        @return An object that corresponds with the original object, nonprintable characters removed.
+        @rtype:  dict|list|tuple|bytes|string
+        @return: An object that corresponds with the original object, nonprintable characters removed.
         """
 
         validCategories = ('Lu', 'Ll', 'Lt', 'LC', 'Lm', 'Lo', 'L', 'Mn', 'Mc', 'Me', 'M', 'Nd', 'Nl', 'No', 'N', 'Pc', 'Pd', 'Ps', 'Pe', 'Pi', 'Pf', 'Po', 'P', 'Sm', 'Sc', 'Sk', 'So', 'S', 'Zs', 'Zl', 'Zp', 'Z')
@@ -245,6 +243,11 @@ def filterCharacters(s):
 
 
 def refresh_OAuth2_Token(self):
+        """
+        tries to refresh the provider oauth2 token
+
+        this applies moslty for google where oauth2 token have to be refreshed every 2 hours
+        """
         if self.auth_type_search != 'oauth_2':
             raise discotechError('Not a OAuth2 provider')
 
@@ -274,6 +277,15 @@ Provider.refreshOAuth2Token = refresh_OAuth2_Token
 
 # dynamiclly add search function to Provider class
 def provider_search(self,keyword):
+        """
+        search the provider
+
+        @type  keyword: str
+        @param keyword: the keyword to search for
+
+        @rtype:  str
+        @return: the response from the provider
+        """
         return _provider_query(self,keyword)
 
 Provider.search = provider_search

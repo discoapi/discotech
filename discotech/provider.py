@@ -18,7 +18,7 @@ class Provider(object):
         
         """
         # required arguments
-        self._url = url
+        self.url = url
 
         #default arguments
         self.auth_type_search = auth_type_search
@@ -39,7 +39,7 @@ class Provider(object):
 
         >>> provider = discotech.Provider.initFromDict({'name':'YouTube','url':'...'})
         >>> print(vars(provider))
-        {'auth_type_search': 'none', 'name': 'YouTube', '_url': '...'}
+        {'auth_type_search': 'none', 'name': 'YouTube', 'url': '...'}
         
         @type  data: dict
         @param data: a configuraion dict
@@ -59,7 +59,7 @@ class Provider(object):
         >>> config = { 'name':'YouTube', 'auth_type_search': 'api_key', 'auth_value':{'api_key':'...'}}
         >>> provider.updateFromDict(config)
         >>> print(vars(provider))
-        {'auth_type_search': 'api_key', 'auth_value': {'api_key': '...'}, 'name': 'YouTube', '_url': ''}
+        {'auth_type_search': 'api_key', 'auth_value': {'api_key': '...'}, 'name': 'YouTube', 'url': ''}
         
         @type  data: dict
         @param data: provider configuration
@@ -72,7 +72,7 @@ class Provider(object):
         if 'name' in data:
             provider.name = data['name']
         if 'url' in data:
-            provider._url = data['url']
+            provider.url = data['url']
         if 'auth_type_search' in data:
             provider.auth_type_search = data['auth_type_search']
         
@@ -220,7 +220,7 @@ class Provider(object):
         @rtype: Bool
         """
 
-        requiredFields = ['oauth2_refresh_token_url','oauth2_refresh_token','oauth2_client_id','oauth2_client_secret']
+        requiredFields = ['oauth2_refresh_tokenurl','oauth2_refresh_token','oauth2_client_id','oauth2_client_secret']
 
         for requiredField in requiredFields:
             if not requiredField in self.auth_value:
@@ -237,8 +237,8 @@ class Provider(object):
         """
         #object == json record
         retDict = dict(self.__dict__)
-        #rename _url to url
-        retDict['url'] = retDict.pop('_url')
+        #rename url to url
+        retDict['url'] = retDict.pop('url')
         return retDict
 
         
