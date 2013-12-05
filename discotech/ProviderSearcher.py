@@ -1,0 +1,149 @@
+import json
+from .errors import discotechError
+from .provider import Provider
+
+class ProviderSearcher(object):
+
+
+    def __init__(self):
+        #internal providers dict
+        self._providers = {}
+
+        #excluded config is stored here
+        self._excludedConfig = {}
+        
+
+    def _excludeConfig(self,config):
+        # remove name from config
+        providerName = config.pop('name')
+        excludedAttributes = []
+        # save exluded values
+        for key, value in config.items():
+                excludedAttributes.append((key, value))
+        #save exluded values for the provider
+        if providerName in self._excludedConfig:
+                self._excludedConfig[providerName] += excludedAttributes
+        else:
+                self._excludedConfig[providerName] = excludedAttributes
+        
+
+    def _addProviderFromConfig(self,config, saveConfig):
+        provider = Provider.initFromDict(config)
+
+        # only not excluded configs are saved
+        if not saveConfig:
+                self._excludeConfig(config)
+        self.addProvider(provider)
+
+    def _updateProviderFromConfig(self,config, saveConfig):
+        self._providers[config['name']].updateFromDict(config)
+
+        if not saveConfig:
+                self._excludeConfig(config)
+        
+        
+    def addProvider(self,provider):
+        if not hasattr(provider,'name'):
+                raise discotechError('Missing name for provider')
+        
+        self._providers[provider.name] = provider
+
+    def addProviders(self,providers):
+        for provider in providers:
+                addProvider(provider)
+
+    def getProvider(self,providerName):
+        return self._providers[providerName]
+                
+    def search(self,providerName,keyword):
+        if not providerName in self._providers:
+                raise discotechError('Missing provider:'+providerName)
+        return self._providers[providerName].search(keyword)
+
+    def searchAll(self,keword):
+        retDict = {}
+        for providerName, provider in self._providers.items():
+                retDict[providerName] = provider.search(keword)
+        return retDict
+
+
+    def loadBaseConfig(self,config):
+        self._loadConfig(config, False)
+
+    def loadConfig(self,config):
+        self._loadConfig(config, True)
+
+    def _loadConfig(self,config, includeConfig):
+        #if it's list
+        if type(config) is list:
+                for itemConfig in config:
+                        self._loadConfig(itemConfig,includeConfig)
+        #if it's dict (single item config)
+        if type(config) is dict:
+                #check if it's a new config or an update
+                if config['name'] in self._providers:
+                        #update
+                        self._updateProviderFromConfig(config,includeConfig)
+                else:
+                        #new provider
+                        self._addProviderFromConfig(config,includeConfig)
+        #if it's string
+        if type(config) is str:
+                #could be an address
+                if config.startswith('http://') or config.startswith('https://'):
+                        configFile = getUrlContents(config)
+                        confDict = json.loads(configFile['response_text'])
+                        #recursivly call yourself
+                        return self._loadConfig(confDict,includeConfig)
+                #could be file name
+                confFile = open(config,'r')
+                confDict = json.loads(confFile.read())
+
+                #recursivly call yourself
+                return self._loadConfig(confDict,includeConfig)
+
+    def getSearchableProviders(self):
+        retList = []
+        for providerName, provider in self._providers.items():
+                if provider.isSearchable():
+                        retList.append(provider)
+        return retList
+                
+                
+    def getConfig(self):
+        retList = []
+        for providerName, provider in self._providers.items():
+                retList.append(provider.toDict())
+        #filter initial config
+        #notice iterating over list while removing items from it
+        listCount = len(retList)
+        currentItem = 0
+        while currentItem < listCount:
+                provider = retList[currentItem]       	
+
+                # should you filter this provider
+                if provider['name'] in self._excludedConfig:
+                        for key, value in self._excludedConfig[provider['name']]:
+                                #print "{0} : {1}".format(key,value)
+                                if provider[key] == value:
+                                        del provider[key]
+                        #if only name left
+                        if len(provider.items()) == 1:
+                                retList.remove(provider)
+                                listCount = listCount-1
+                        else:
+                                currentItem = currentItem+1
+                else:
+                        #provider doesn't have excluded values
+                        currentItem = currentItem+1
+        #in single item no need for list
+        if len(retList) == 1:
+                return retList[0]
+        else:
+                return retList
+
+    def saveConfig(self,filename):
+        configFile = open(filename,'w')
+        jsonStr = json.dumps(self.getConfig(), sort_keys=False,indent=4, separators=(',', ': '))
+        configFile.write(jsonStr)
+        configFile.close()
