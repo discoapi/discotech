@@ -3,8 +3,10 @@ from .errors import discotechError
 from .provider import Provider
 
 class ProviderSearcher(object):
-
-
+    """
+    class to help search and manage several providers
+    """
+    
     def __init__(self):
         #internal providers dict
         self._providers = {}
@@ -43,24 +45,66 @@ class ProviderSearcher(object):
         
         
     def addProvider(self,provider):
+        """
+        add provider to providerSearcher
+
+        provider name must be set
+
+        @type  provider: Provider
+        @param provider: provider to add
+        """
         if not hasattr(provider,'name'):
                 raise discotechError('Missing name for provider')
         
         self._providers[provider.name] = provider
 
     def addProviders(self,providers):
+        """
+        add several providers to ProviderSearcher
+
+        @type  providers: list
+        @param providers: providers to add
+        """
         for provider in providers:
                 addProvider(provider)
 
     def getProvider(self,providerName):
+        """
+        get a provider stored in the ProviderSearcher
+
+        @type  providerName: str
+        @param providerName: the name of the provider you want to get
+        """
         return self._providers[providerName]
                 
     def search(self,providerName,keyword):
+        """
+        search a stored provider
+
+        @type  providerName: str
+        @param providerName: the name of the provider you want to search
+        @type  keyword: str
+        @param keyword: the keyword to search
+
+        @rtype: str
+        @return: the response from the provider
+        """
         if not providerName in self._providers:
                 raise discotechError('Missing provider:'+providerName)
         return self._providers[providerName].search(keyword)
 
     def searchAll(self,keword):
+        """
+        search all the provider stored in ProviderSearcher
+
+        the provider must return True for isSearchable() method
+
+        @type  keword: str
+        @param keyword: the keyword to search
+
+        @rtype: dict
+        @return: a dictionay where the keys are the provider name and the values are the provider responses
+        """
         retDict = {}
         for providerName, provider in self._providers.items():
                 retDict[providerName] = provider.search(keword)
@@ -68,9 +112,25 @@ class ProviderSearcher(object):
 
 
     def loadBaseConfig(self,config):
+        """
+        load a config object(dict or local file or url) but don't save it to local config
+        this is similliar to loadConfig but doesn't affect the ProviderSearcher config
+
+        this is usefull if you have a remote configuration for providers you don't to overwrite with saveConfig() method
+        for example https://discoapi.com/api/providers.json
+
+        @type  config: dict | str
+        @param config: the config to load
+        """
         self._loadConfig(config, False)
 
     def loadConfig(self,config):
+        """
+        load a config object(dict or local file or url)
+
+        @type  config: dict | str
+        @param config: the config to load
+        """
         self._loadConfig(config, True)
 
     def _loadConfig(self,config, includeConfig):
@@ -103,6 +163,10 @@ class ProviderSearcher(object):
                 return self._loadConfig(confDict,includeConfig)
 
     def getSearchableProviders(self):
+        """
+        @return: all the stored providers which return True for the isSearchable() method
+        @rtype: bool
+        """
         retList = []
         for providerName, provider in self._providers.items():
                 if provider.isSearchable():
@@ -111,6 +175,12 @@ class ProviderSearcher(object):
                 
                 
     def getConfig(self):
+        """
+        @rtype: dict
+        @return: the current config of the ProviderSearcher and all stored providers
+
+        this can be very usefull for serializing ProviderSearcher object
+        """
         retList = []
         for providerName, provider in self._providers.items():
                 retList.append(provider.toDict())
@@ -143,6 +213,12 @@ class ProviderSearcher(object):
                 return retList
 
     def saveConfig(self,filename):
+        """
+        save the current ProviderSearcher configuraion in JSON format
+
+        @type  filename: str
+        @param filename: the filename of the file to save to
+        """
         configFile = open(filename,'w')
         jsonStr = json.dumps(self.getConfig(), sort_keys=False,indent=4, separators=(',', ': '))
         configFile.write(jsonStr)
