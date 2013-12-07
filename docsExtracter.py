@@ -8,6 +8,11 @@ htmlTemplate = '<div class="content"></div>'
 
 classDoc = {}
 
+def createSOUPforMethod(methodObj):
+    htmlStart = "<h3>{0}</h3><p>{1}</p>".format(methodObj.signature,methodObj.desc)
+
+    
+
 def addToDict(dictObj,name,obj):
     if name in dictObj:
         dictObj[name].append(obj)
@@ -109,6 +114,8 @@ for table in soup.select('table.details'):
 htmlDoc = BeautifulSoup(htmlTemplate)
 
 content = htmlDoc.select("div.content")[0]
+
+
 
 print(htmlDoc.prettify())
 
