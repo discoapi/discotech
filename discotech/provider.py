@@ -185,7 +185,8 @@ class Provider(object):
         @param clientSecret: your application client secret
         @type  refreshToken: str
         @param refreshToken: the access token refresh token
-        @type  refreshTokenUrl: the url used to refresh the access token
+        @type  refreshTokenUrl: str
+        @param  refreshTokenUrl: the url used to refresh the access token
         """
         self.auth_type_search = 'oauth_2'
 
