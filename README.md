@@ -7,17 +7,25 @@ homepage: https://www.discoapi.com/discotech
 
 you can find full docs here: https://www.discoapi.com/discotech/docs
 
-requirements:
+#requirements:
 - python > 2.6
 - requests 
 - requests-oauth
 
-installation:
-#python setup.yp
+#installation:
+```bash
+python setup.yp
 
-unit tests:
-#cd tests && python -m unittest -v test_provider test_providerseacher
+```
 
-creating docs:
-#epydoc -v discotech -o docs
+#unit tests:
+```bash
+cd tests && python -m unittest -v test_provider test_providerseacher
+
+```
+#creating docs:
+```bash
+epydoc -v discotech -o docs
+
+```
 note that you have to have epydoc installed (pip install epydoc)
