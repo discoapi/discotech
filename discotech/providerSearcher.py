@@ -93,13 +93,13 @@ class ProviderSearcher(object):
                 raise discotechError('Missing provider:'+providerName)
         return self._providers[providerName].search(keyword)
 
-    def searchAll(self,keword):
+    def searchAll(self,keyword):
         """
         search all the provider stored in ProviderSearcher
 
         the provider must return True for isSearchable() method
 
-        @type  keword: str
+        @type  keyword: str
         @param keyword: the keyword to search
 
         @rtype: dict
@@ -107,7 +107,7 @@ class ProviderSearcher(object):
         """
         retDict = {}
         for providerName, provider in self._providers.items():
-                retDict[providerName] = provider.search(keword)
+                retDict[providerName] = provider.search(keyword)
         return retDict
 
 

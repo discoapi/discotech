@@ -10,3 +10,6 @@ docs: install
 
 tests: install
 	cd tests && python -m unittest -v $(TESTS)
+
+discoapi_docs: docs
+	python docsExtracter.py && cp api_docs/* /home/stas/Sites/discoapi/public_html/discotech/docs

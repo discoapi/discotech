@@ -2,8 +2,9 @@ from .errors import discotechError
 
 class Provider(object):
     """
-    Describe a social media provider
+    Describe an API provider
     """
+
     def __init__(self, url, name = None, auth_type_search='none'):
         """
         @type  url: str
@@ -43,6 +44,8 @@ class Provider(object):
         
         @type  data: dict
         @param data: a configuraion dict
+
+        @return: new Prorivder
         """
         provider = Provider(data['url'])
         Provider._updateProviderFromDict(provider,data)
