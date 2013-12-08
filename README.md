@@ -15,17 +15,16 @@ you can find full docs here: https://www.discoapi.com/discotech/docs
 #installation:
 ```bash
 python setup.yp
-
 ```
 
 #unit tests:
 ```bash
 cd tests && python -m unittest -v test_provider test_providerseacher
-
 ```
+
 #creating docs:
 ```bash
 epydoc -v discotech -o docs
-
 ```
+
 note that you have to have epydoc installed (pip install epydoc)
