@@ -7,12 +7,20 @@ homepage: https://www.discoapi.com/products/discotech.html
 
 you can find full docs here: https://www.discoapi.com/discotech/docs
 
+
+
+#installation
+```bash
+pip install discotech
+```
+
 #requirements:
 - python > 2.6
 - requests 
 - requests-oauth
+```
 
-#installation:
+#installation from source:
 ```bash
 python setup.py install
 ```
