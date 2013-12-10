@@ -14,6 +14,7 @@ setup(name='discotech',
       author_email='groovy@discoapi.com',
       url='http://github.com/storborg/funniest',
       packages=['discotech'],
+      license='GPL',
       install_requires=[
           'requests-oauthlib',
       ],
