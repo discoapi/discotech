@@ -18,7 +18,7 @@ pip install discotech
 - python > 2.6
 - requests 
 - requests-oauth
-```
+
 
 #installation from source:
 ```bash
