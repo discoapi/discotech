@@ -1,6 +1,11 @@
 import json
+
+import discotech
+
 from .errors import discotechError
 from .provider import Provider
+
+__package__ = 'dicotech'
 
 class ProviderSearcher(object):
     """
@@ -148,10 +153,10 @@ class ProviderSearcher(object):
                         #new provider
                         self._addProviderFromConfig(config,includeConfig)
         #if it's string
-        if type(config) is str:
+        if isinstance(config,basestring):
                 #could be an address
                 if config.startswith('http://') or config.startswith('https://'):
-                        configFile = getUrlContents(config)
+                        configFile = discotech.getUrlContents(config)
                         confDict = json.loads(configFile['response_text'])
                         #recursivly call yourself
                         return self._loadConfig(confDict,includeConfig)

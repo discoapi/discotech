@@ -1,5 +1,7 @@
 from .errors import discotechError
 
+__package__ = 'dicotech'
+
 class Provider(object):
     """
     Describe an API provider
@@ -99,11 +101,11 @@ class Provider(object):
                 
             if provider.auth_type_search=='oauth_2':
                 accessToken = credentials['oauth2_access_token']
-                tokenExpireTimestamp = credentials['oauth2_token_expire_timestamp']
-                clientId = credentials['oauth2_client_id']
-                clientSecret = credentials['oauth2_client_secret']
-                refreshToken = credentials['oauth2_refresh_token']
-                refreshTokenUrl = credentials['oauth2_refresh_token_url']
+                tokenExpireTimestamp = credentials['oauth2_token_expire_timestamp'] if 'oauth2_token_expire_timestamp' in credentials else None
+                clientId = credentials['oauth2_client_id'] if 'oauth2_client_id' in credentials else None
+                clientSecret = credentials['oauth2_client_secret'] if 'oauth2_client_secret' in credentials else None
+                refreshToken = credentials['oauth2_refresh_token'] if 'oauth2_refresh_token' in credentials else None
+                refreshTokenUrl = credentials['oauth2_refresh_token_url'] if 'oauth2_refresh_token_url' in credentials else None
                 provider.setOAuth2(accessToken,tokenExpireTimestamp,clientId,clientSecret,refreshToken,refreshTokenUrl)
                 
             if provider.auth_type_search =='api_key':
