@@ -2,10 +2,10 @@ import json
 
 import discotech
 
-from .errors import discotechError
+from discotech.errors import discotechError
 from .provider import Provider
 
-__package__ = 'discotech'
+__package__ = 'APIProviders'
 
 class ProviderSearcher(object):
     """

@@ -1,10 +1,10 @@
-from .errors import discotechError
+from discotech.errors import discotechError
 
-__package__ = 'discotech'
+__package__ = 'APIProviders'
 
 class Provider(object):
     """
-    Describe an API provider
+    A general class to describe an API provider
     """
 
     def __init__(self, url, name = None, auth_type_search='none'):
@@ -17,7 +17,7 @@ class Provider(object):
         @type  name: str
         @param name: Provider's name
         @type  auth_type_search: str
-        @param auth_type_search: the provider authentocation method possible value are 'none','api_key','oauth_1','oauth_2'
+        @param auth_type_search: the provider authentication method possible value are 'none','api_key','oauth_1','oauth_2'
         
         """
         # required arguments

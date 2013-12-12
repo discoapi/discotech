@@ -1,6 +1,6 @@
 import json
 
-__package__ = 'discotech'
+__package__ = 'discotech.discoAPI'
 
 class ParseResults(object):
 

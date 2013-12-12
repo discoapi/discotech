@@ -13,7 +13,7 @@ setup(name='discotech',
       author='discoAPI Team',
       author_email='groovy@discoapi.com',
       url='http://github.com/discoapi/discotech',
-      packages=['discotech'],
+      packages=['discotech','discotech.APIProviders','discotech.discoAPI'],
       license='GPL',
       install_requires=[
           'requests-oauthlib',
