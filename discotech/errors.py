@@ -1,4 +1,4 @@
-__package__ = 'dicotech'
+__package__ = 'discotech'
 
 class discotechError(Exception):
     def __init__(self, error):

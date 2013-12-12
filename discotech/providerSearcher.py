@@ -5,7 +5,7 @@ import discotech
 from .errors import discotechError
 from .provider import Provider
 
-__package__ = 'dicotech'
+__package__ = 'discotech'
 
 class ProviderSearcher(object):
     """

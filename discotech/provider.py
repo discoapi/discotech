@@ -1,6 +1,6 @@
 from .errors import discotechError
 
-__package__ = 'dicotech'
+__package__ = 'discotech'
 
 class Provider(object):
     """

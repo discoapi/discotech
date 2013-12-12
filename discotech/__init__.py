@@ -10,7 +10,7 @@ from .discoAPIParser import DiscoAPIParser
 from .keywordManager import KeywordManager
 
 
-__package__ = 'dicotech'
+__package__ = 'discotech'
 
 #configurable settings
 http_timeout_seconds = 20

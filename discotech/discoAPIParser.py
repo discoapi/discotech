@@ -2,7 +2,7 @@ import json
 import discotech
 from .parseResults import ParseResults
 
-__package__ = 'dicotech'
+__package__ = 'discotech'
 
 class DiscoAPIParser(object):
 
