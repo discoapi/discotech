@@ -153,7 +153,14 @@ class ProviderSearcher(object):
                         #new provider
                         self._addProviderFromConfig(config,includeConfig)
         #if it's string
-        if isinstance(config,basestring):
+        isString = None
+        # python 2 vs 3
+        try:
+            isString = isinstance(config, basestring)
+        except NameError:
+            isString = isinstance(config, str)
+        
+        if isString:
                 #could be an address
                 if config.startswith('http://') or config.startswith('https://'):
                         configFile = discotech.getUrlContents(config)
@@ -194,7 +201,7 @@ class ProviderSearcher(object):
         listCount = len(retList)
         currentItem = 0
         while currentItem < listCount:
-                provider = retList[currentItem]       	
+                provider = retList[currentItem]         
 
                 # should you filter this provider
                 if provider['name'] in self._excludedConfig:

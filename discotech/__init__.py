@@ -48,16 +48,14 @@ def _provider_query(provider, keyword):
 
 	#OAuth2 token expire timestamps
 	if provider.auth_type_search == 'oauth_2':
-		if hasattr(provider.auth_value,'oauth2_token_expire_timestamp'):
-			if 'oauth2_token_expire_timestamp' in provider.auth_value < int(time.time()):
-				if provider.isOAuth2Refreshable():
-					provider.refreshOAuth2Token()
-					# check again
-					if provider.auth_value['oauth2_token_expire_timestamp'] < int(time.time()):
-						raise discotechError("oauth2 token expire timestamp reached and can't be refreshed")					      
-		       
-				else:
-					raise discotechError("oauth2 token expire timestamp reached and can't be refreshed")
+		if 'oauth2_token_expire_timestamp' in provider.auth_value and provider.auth_value['oauth2_token_expire_timestamp'] < int(time.time()):
+			if provider.isOAuth2Refreshable():
+				provider.refreshOAuth2Token()
+				# check again
+				if provider.auth_value['oauth2_token_expire_timestamp'] < int(time.time()):
+					raise discotechError("oauth2 token expire timestamp reached and can't be refreshed")		       
+			else:
+				raise discotechError("oauth2 token expire timestamp reached and can't be refreshed")
 					
 
 	providerUrl = provider.url
@@ -183,6 +181,9 @@ def getUrlContents(url, postData='', authCredentials={} , headers= None):
 	return_dict['headers'] = response.headers
 	return_dict['totalRequestTime'] = endTime-startTime
 
+
+	response.close()
+	
 	return return_dict
 
 
@@ -264,8 +265,11 @@ def refresh_OAuth2_Token(self):
 	    'client_secret' : self.auth_value['oauth2_client_secret'],
 	    'grant_type' : 'refresh_token'
 	}
-	
-	encodedpostField = urllib.urlencode(postFields)
+
+	if (3, 0) <= sys.version_info:
+		encodedpostField = urllib.parse.urlencode(postFields)
+	else:
+		encodedpostField = urllib.urlencode(postFields)
 
 	newToken = getUrlContents(self.auth_value['oauth2_refresh_token_url'],encodedpostField,
 				  {},{'Content-Type': 'application/x-www-form-urlencoded'})
@@ -309,6 +313,8 @@ Provider.searchUrl = provider_searchURL
 
 #internal instances
 providerSearcher = ProviderSearcher()
+discoAPIParser = DiscoAPIParser()
+keywordManager = KeywordManager()
 
 #discotech functionality
 def loadConfig(config):
@@ -316,16 +322,15 @@ def loadConfig(config):
 	if type(config) is dict:
 		#try to load providers
 		if 'providers' in config:
-			providerSearcher = ProviderSearcher()
 			providerSearcher.loadConfig(config['providers'])
 		#try to load parser
 		if 'parser' in config:
-			discoAPIParser = DiscoAPIParser.loadConfig(config['parser'])
+			discoAPIParser.loadConfig(config['parser'])
 		#try to load searcher
 
 		#try to load keyword manager
 		if 'keywords' in config:
-			keywordManager = KeywordManager.loadConfig(config['keywords'])
+			keywordManager.loadConfig(config['keywords'])
 
 		return (providerSearcher,discoAPIParser,keywordManager)
 		

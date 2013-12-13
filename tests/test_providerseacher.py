@@ -1,6 +1,10 @@
 import unittest
 import discotech
 import json
+import testutil
+import os
+import sys
+import random
 
 class TestProviderSeacher(unittest.TestCase):
 
@@ -19,10 +23,16 @@ class TestProviderSeacher(unittest.TestCase):
     def test_addProvider(self):
         unnamedProvider = discotech.Provider('...')
 
-        # missing
-        with self.assertRaisesRegexp(discotech.discotechError,'Missing name for provider'):
-            self.providerSearcher.addProvider(unnamedProvider)
 
+        
+        
+        # missing
+        if (3, 2) <= sys.version_info:
+            with self.assertRaisesRegex(discotech.discotechError,'Missing name for provider'):
+                self.providerSearcher.addProvider(unnamedProvider)
+        else:
+            with self.assertRaisesRegexp(discotech.discotechError,'Missing name for provider'):
+                self.providerSearcher.addProvider(unnamedProvider)
         #give it a name
         unnamedProvider.name = 'named provider'
         namedProvider = unnamedProvider
@@ -32,8 +42,8 @@ class TestProviderSeacher(unittest.TestCase):
 
     def test_search(self):
         providerConfig = {
-			'name': 'YouTube',
-    			'url':'http://gdata.youtube.com/feeds/api/videos?vq=!keyword!&orderby=published&max-results=50&start-index=1'
+                        'name': 'YouTube',
+                        'url':'http://gdata.youtube.com/feeds/api/videos?vq=!keyword!&orderby=published&max-results=50&start-index=1'
         }
 
         youtube = discotech.Provider.initFromDict(providerConfig)
@@ -44,9 +54,12 @@ class TestProviderSeacher(unittest.TestCase):
         self.assertNotEqual(results,False)
         # try unknown provider
 
-        with self.assertRaisesRegexp(discotech.discotechError,'Unknown Provider'):
-            results = self.providerSearcher.search('Unknown Provider','linux')
-
+        if (3, 2) <= sys.version_info:
+            with self.assertRaisesRegex(discotech.discotechError,'Unknown Provider'):
+                results = self.providerSearcher.search('Unknown Provider','linux')
+        else:
+            with self.assertRaisesRegexp(discotech.discotechError,'Unknown Provider'):
+                results = self.providerSearcher.search('Unknown Provider','linux')
 
     def test_searchAll(self):
         providerConfig = {
@@ -88,7 +101,7 @@ class TestProviderSeacher(unittest.TestCase):
         self.assertIn('Metacafe',results)
   
     def test_getConfig(self):
-        self.assertEquals(self.providerSearcher.getConfig(),[])
+        self.assertEqual(self.providerSearcher.getConfig(),[])
 
         providerConfig = [
             {'name': 'YouTube',
@@ -103,17 +116,17 @@ class TestProviderSeacher(unittest.TestCase):
         myConfig = self.providerSearcher.getConfig()
              
         #we want to check that at least one of the providers have the named we sent
-        self.assertEquals(len(filter(self._createNameComprator('YouTube'),myConfig)),1)
+        self.assertEqual(len(list(filter(self._createNameComprator('YouTube'),myConfig))),1)
 
         #let's check the other one
-        self.assertEquals(len(filter(self._createNameComprator('Metacafe'),myConfig)),1)
+        self.assertEqual(len(list(filter(self._createNameComprator('Metacafe'),myConfig))),1)
 
         #we got only 2 providers
-        self.assertEquals(len(myConfig),2)
+        self.assertEqual(len(myConfig),2)
 
         
     def test_loadBaseConfig(self):
-        self.assertEquals(self.providerSearcher.getConfig(),[])
+        self.assertEqual(self.providerSearcher.getConfig(),[])
 
         providerConfig = [
             {'name': 'YouTube',
@@ -127,7 +140,7 @@ class TestProviderSeacher(unittest.TestCase):
 
         self.providerSearcher.loadBaseConfig(providerConfig)
 
-        self.assertEquals(self.providerSearcher.getConfig(),[])
+        self.assertEqual(self.providerSearcher.getConfig(),[])
 
 
         
@@ -135,7 +148,7 @@ class TestProviderSeacher(unittest.TestCase):
 
         self.providerSearcher = discotech.ProviderSearcher()
         
-        self.assertEquals(self.providerSearcher.getConfig(),[])
+        self.assertEqual(self.providerSearcher.getConfig(),[])
         
         baseProviderConfig = [
             {'name': 'YouTube',
@@ -157,15 +170,15 @@ class TestProviderSeacher(unittest.TestCase):
         self.providerSearcher.loadConfig(providerConfig)
 
         #configure another provider
-        self.providerSearcher.getProvider('Facebook').setOAuth2( accessToken='CAACMCfJTFtgBAPO83avt08uAVhwpfwMZApqzFWOWWcnVaW1mOGpVVbc29ZBX2acBcs2Psv3U8CSoJaYwnqfd17zjyrFvXgW0YysWxeDskneSDMZCLYjf4P0ZAQGqWyKzHugwZAxTQpANCK6JKowT0Tt7hYSwRBxV9lGdbimCI0HLAPVgj8oTy' )
+        self.providerSearcher.getProvider('Facebook').setOAuth2( accessToken= testutil.credentials['facebook_access_token'] )
 
         myConfig = self.providerSearcher.getConfig()
 
         #doesn't have YouTube config
-        self.assertEqual(len(filter(self._createNameComprator('YouTube'),myConfig)),0)
+        self.assertEqual(len(list(filter(self._createNameComprator('YouTube'),myConfig))),0)
         
         #facebook has only auth_value and type
-        facebookConfig = filter(self._createNameComprator('Facebook'),myConfig)[0]
+        facebookConfig = list(filter(self._createNameComprator('Facebook'),myConfig))[0]
 
         self.assertTrue('auth_value' in facebookConfig)
         self.assertTrue('auth_type_search' in facebookConfig)
@@ -173,7 +186,7 @@ class TestProviderSeacher(unittest.TestCase):
         self.assertEqual(len(facebookConfig.items()),3)
         
         #metacafe is saved
-        self.assertEqual(len(filter(self._createNameComprator('Metacafe'),myConfig)),1)
+        self.assertEqual(len(list(filter(self._createNameComprator('Metacafe'),myConfig))),1)
         
         # only 2 providers in config
         self.assertEqual(len(myConfig),2)
@@ -185,14 +198,27 @@ class TestProviderSeacher(unittest.TestCase):
         #continue from prevous test
         self.test_loadBaseConfig()
 
+        #create random file name
+        fileName = 'temp'+str(int(random.random()*10000))+'.json'
+
+        newFileNameFound = False
+        while not newFileNameFound:
+            #create random file name
+            fileName = 'temp'+str(int(random.random()*10000))+'.json'
+            if not os.path.exists(fileName):
+                newFileNameFound = True
+        
         #save the config
-        self.providerSearcher.saveConfig('temp.json')
+        self.providerSearcher.saveConfig(fileName)
         
         # load the json file manually
-        jsonFile = open('temp.json','r')
+        jsonFile = open(fileName,'r')
 
         #compare the json and the dict
         self.assertEqual(json.loads(jsonFile.read()),self.providerSearcher.getConfig())
 
+        jsonFile.close()
+        #cleanup - delete this file
+        os.remove(fileName)
 if __name__ == '__main__':
     unittest.main()

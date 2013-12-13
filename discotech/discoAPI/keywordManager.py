@@ -12,12 +12,12 @@ class KeywordManager(object):
         @type  keywords: list
         @param keywords: the keyword you want search for
         """
-	if keywords: 
-	    self.keywords = keywords
-	    self._keywordCount = len(keywords)
-	    self._headLocation = 0
-	else:
-	    self.keywords = keywords
+        if keywords: 
+            self.keywords = keywords
+            self._keywordCount = len(keywords)
+            self._headLocation = 0
+        else:
+            self.keywords = keywords
 
     def dequque(self):
         """
@@ -25,10 +25,10 @@ class KeywordManager(object):
 
         @return: the next keyword in queue
         """
-	if not self.keywords:
-	    raise discotechError("you don't any keywords")
+        if not self.keywords:
+            raise discotechError("you don't any keywords")
 
-	
+        
         retValue = self.keywords[self._headLocation]
         # move head next
         self._headLocation = (self._headLocation + 1) % self._keywordCount
@@ -36,18 +36,18 @@ class KeywordManager(object):
         return retValue
 
     def _updateFromList(self,keywords):
-	self.keywords = keywords
-	self._keywordCount = len(keywords)
-	self._headLocation = 0
-	    
+        self.keywords = keywords
+        self._keywordCount = len(keywords)
+        self._headLocation = 0
+            
 
     def loadConfig(self,config):
-	"""
-	load keywords from a configuation
+        """
+        load keywords from a configuation
 
-	@type  config: list | str
-	@param config: a list of keywords or a path or address of JSON configuration file
-	"""
+        @type  config: list | str
+        @param config: a list of keywords or a path or address of JSON configuration file
+        """
         #if it's list
         if type(config) is list:
                 self._updateFromList(config)

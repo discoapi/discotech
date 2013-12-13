@@ -180,7 +180,7 @@ class Provider(object):
         @param accessToken: oauth2 access token
 
         Optional Parametars:
-        @type  tokenExpireTimestamp: str
+        @type  tokenExpireTimestamp: int
         @param tokenExpireTimestamp: when will the oauth2 token will expire
 
         Needed only for refreshing tokens
@@ -226,7 +226,7 @@ class Provider(object):
         @rtype: Bool
         """
 
-        requiredFields = ['oauth2_refresh_tokenurl','oauth2_refresh_token','oauth2_client_id','oauth2_client_secret']
+        requiredFields = ['oauth2_refresh_token_url','oauth2_refresh_token','oauth2_client_id','oauth2_client_secret']
 
         for requiredField in requiredFields:
             if not requiredField in self.auth_value:
