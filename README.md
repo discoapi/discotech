@@ -26,6 +26,9 @@ python setup.py install
 ```
 
 #unit tests:
+
+first add your credentials to tests/testCredentials.json
+
 ```bash
 python setup.py test
 ```
