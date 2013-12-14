@@ -12,6 +12,7 @@ __package__ = 'discotech'
 providerSearcher = ProviderSearcher()
 discoAPIParser = DiscoAPIParser()
 keywordManager = KeywordManager()
+discoAPISearcher = DiscoAPISearcher()
 
 #discotech functionality
 def loadConfig(config):
@@ -32,7 +33,14 @@ def loadConfig(config):
                 return (providerSearcher,discoAPIParser,keywordManager)
                 
         #if it's string
-        if type(config) is str:
+        isString = None
+        # python 2 vs 3
+        try:
+            isString = isinstance(config, basestring)
+        except NameError:
+            isString = isinstance(config, str)
+        
+        if isString:
                 #could be an address
                 if config.startswith('http://') or config.startswith('https://'):
                         configFile = getUrlContents(config)
