@@ -13,7 +13,7 @@ class KeywordManager(object):
         @param keywords: the keyword you want search for
         """
         if keywords: 
-            self.keywords = keywords
+            self.keywords = list(keywords)
             self._keywordCount = len(keywords)
             self._headLocation = 0
         else:

@@ -3,8 +3,7 @@ from .APIProviders.provider import Provider
 from .APIProviders.providerSearcher import ProviderSearcher
 from .discoAPI.discoAPIParser import DiscoAPIParser
 from .discoAPI.keywordManager import KeywordManager
-
-import utils
+from .discoAPI.discoAPISearcher import DiscoAPISearcher
 
 __package__ = 'discotech'
 
@@ -16,33 +15,33 @@ keywordManager = KeywordManager()
 
 #discotech functionality
 def loadConfig(config):
-	#if it's dict
-	if type(config) is dict:
-		#try to load providers
-		if 'providers' in config:
-			providerSearcher.loadConfig(config['providers'])
-		#try to load parser
-		if 'parser' in config:
-			discoAPIParser.loadConfig(config['parser'])
-		#try to load searcher
+        #if it's dict
+        if type(config) is dict:
+                #try to load providers
+                if 'providers' in config:
+                        providerSearcher.loadConfig(config['providers'])
+                #try to load parser
+                if 'parser' in config:
+                        discoAPIParser.loadConfig(config['parser'])
+                #try to load searcher
 
-		#try to load keyword manager
-		if 'keywords' in config:
-			keywordManager.loadConfig(config['keywords'])
+                #try to load keyword manager
+                if 'keywords' in config:
+                        keywordManager.loadConfig(config['keywords'])
 
-		return (providerSearcher,discoAPIParser,keywordManager)
-		
-	#if it's string
-	if type(config) is str:
-		#could be an address
-		if config.startswith('http://') or config.startswith('https://'):
-			configFile = getUrlContents(config)
-			confDict = json.loads(configFile['response_text'])
-			#recursivly call yourself
-			return loadConfig(confDict)
-		#could be file name
-		confFile = open(config,'r')
-		confDict = json.loads(confFile.read())
+                return (providerSearcher,discoAPIParser,keywordManager)
+                
+        #if it's string
+        if type(config) is str:
+                #could be an address
+                if config.startswith('http://') or config.startswith('https://'):
+                        configFile = getUrlContents(config)
+                        confDict = json.loads(configFile['response_text'])
+                        #recursivly call yourself
+                        return loadConfig(confDict)
+                #could be file name
+                confFile = open(config,'r')
+                confDict = json.loads(confFile.read())
 
-		#recursivly call yourself
-		return loadConfig(confDict)
+                #recursivly call yourself
+                return loadConfig(confDict)

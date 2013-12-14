@@ -25,7 +25,7 @@ testCredentials = json.loads(testCredentialsFile.read())
 credentials_values = ['twitter_client_key','twitter_client_secret','twitter_token_identifier',
                       'twitter_token_secret','facebook_access_token','google_access_token',
                       'google_refresh_token','google_token_expire_timestamp','google_client_id',
-                      'google_client_secret']
+                      'google_client_secret','discoAPI_key']
 
 
 for credentials_value in credentials_values:

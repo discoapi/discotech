@@ -6,8 +6,7 @@ import os
 import sys
 import random
 
-class TestProviderSeacher(unittest.TestCase):
-
+class TestProviderSearcher(unittest.TestCase):
 
     # utility filterning for configs
     def _createNameComprator(self,name):
@@ -15,18 +14,12 @@ class TestProviderSeacher(unittest.TestCase):
                                
     
     def setUp(self):
-        self.providerSearcher = discotech.ProviderSearcher()
-        # every test the discotech module should be reloaded because it has a saved state
-        #reload(discotech)
-        
+        self.providerSearcher = discotech.ProviderSearcher()        
 
     def test_addProvider(self):
         unnamedProvider = discotech.Provider('...')
 
-
-        
-        
-        # missing
+        # missing name
         if (3, 2) <= sys.version_info:
             with self.assertRaisesRegex(discotech.discotechError,'Missing name for provider'):
                 self.providerSearcher.addProvider(unnamedProvider)
@@ -143,9 +136,7 @@ class TestProviderSeacher(unittest.TestCase):
         self.assertEqual(self.providerSearcher.getConfig(),[])
 
 
-        
         #another scenario
-
         self.providerSearcher = discotech.ProviderSearcher()
         
         self.assertEqual(self.providerSearcher.getConfig(),[])
@@ -220,5 +211,7 @@ class TestProviderSeacher(unittest.TestCase):
         jsonFile.close()
         #cleanup - delete this file
         os.remove(fileName)
+
+	
 if __name__ == '__main__':
     unittest.main()

@@ -52,7 +52,7 @@ class DiscoAPIParser(object):
         postData_json = json.dumps(postData)
     
         # response from DiscoAPI
-        url_contents = discotech.getUrlContents('https://discoapi.com/api/parse',postData_json)
+        url_contents = discotech.utils.getUrlContents('https://discoapi.com/api/parse',postData_json)
 
         return ParseResults(url_contents['response_text'])
         
@@ -62,6 +62,15 @@ class DiscoAPIParser(object):
         self._toCacheResults = config['cache']
         self._returnResults = config['return_results']
 
+    def setDiscoAPIKey(self,api_key):
+        """
+        set you discoAPIKey
+
+        @param api_key: your discoAPI key
+        @type  api_key: str
+        """
+        self._discoAPIKey = api_key
+        
     
     def loadConfig(self,config):
         """

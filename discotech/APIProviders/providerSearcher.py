@@ -163,7 +163,7 @@ class ProviderSearcher(object):
         if isString:
                 #could be an address
                 if config.startswith('http://') or config.startswith('https://'):
-                        configFile = discotech.getUrlContents(config)
+                        configFile = discotech.utils.getUrlContents(config)
                         confDict = json.loads(configFile['response_text'])
                         #recursivly call yourself
                         return self._loadConfig(confDict,includeConfig)

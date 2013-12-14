@@ -256,58 +256,69 @@ class Provider(object):
         
     
     def refreshOAuth2Token(self):
-	"""
-	tries to refresh the provider oauth2 token
+        """
+        tries to refresh the provider oauth2 token
 
-	this applies moslty for google where oauth2 token have to be refreshed every 2 hours
-	"""
-	if self.auth_type_search != 'oauth_2':
-	    raise discotechError('Not a OAuth2 provider')
+        this applies moslty for google where oauth2 token have to be refreshed every 2 hours
+        """
+        if self.auth_type_search != 'oauth_2':
+            raise discotechError('Not a OAuth2 provider')
 
-	#prepare refresh token fields
+        #prepare refresh token fields
 
-	postFields = {
-	    'refresh_token' : self.auth_value['oauth2_refresh_token'],
-	    'client_id' : self.auth_value['oauth2_client_id'],
-	    'client_secret' : self.auth_value['oauth2_client_secret'],
-	    'grant_type' : 'refresh_token'
-	}
+        postFields = {
+            'refresh_token' : self.auth_value['oauth2_refresh_token'],
+            'client_id' : self.auth_value['oauth2_client_id'],
+            'client_secret' : self.auth_value['oauth2_client_secret'],
+            'grant_type' : 'refresh_token'
+        }
 
-	if (3, 0) <= sys.version_info:
-	    encodedpostField = urllib.parse.urlencode(postFields)
-	else:
-	    encodedpostField = urllib.urlencode(postFields)
+        if (3, 0) <= sys.version_info:
+            encodedpostField = urllib.parse.urlencode(postFields)
+        else:
+            encodedpostField = urllib.urlencode(postFields)
 
-	newToken = discotech.utils.getUrlContents(self.auth_value['oauth2_refresh_token_url'],encodedpostField,
-					{},{'Content-Type': 'application/x-www-form-urlencoded'})
-	
-	#parse the response, this works only with google
-	newToken = json.loads(newToken['response_text'])
+        newToken = discotech.utils.getUrlContents(self.auth_value['oauth2_refresh_token_url'],encodedpostField,
+                                        {},{'Content-Type': 'application/x-www-form-urlencoded'})
+        
+        #parse the response, this works only with google
+        newToken = json.loads(newToken['response_text'])
 
-	self.auth_value['oauth2_access_token'] = newToken['access_token']
-	self.auth_value['oauth2_token_expire_timestamp'] = int(time.time()) + newToken['expires_in']
+        self.auth_value['oauth2_access_token'] = newToken['access_token']
+        self.auth_value['oauth2_token_expire_timestamp'] = int(time.time()) + newToken['expires_in']
 
 
 
     def search(self,keyword):
-	"""
-	search the provider
+        """
+        search the provider
 
-	@type  keyword: str
-	@param keyword: the keyword to search for
+        @type  keyword: str
+        @param keyword: the keyword to search for
 
-	@rtype:	 str
-	@return: the response from the provider
-	"""
-	return discotech.utils.provider_query(self,keyword)
+        @rtype:  str
+        @return: the response from the provider
+        """
+        return discotech.utils.provider_query(self,keyword)
 
 
     
     def searchUrl(self,url):
-	originalProvider = self.url
-	# switch temporarly to next page url
-	self.url = url
-	retVal = self.search('')
-	# bring back url
-	self.url = originalProvider
-	return retVal
+        """
+        search the provider but with a different url
+        this is usefull when you parsed the provider reponse and have a url for the next
+        you don't to create a new provider instance
+
+        @type  url: str
+        @param url: the url to search
+
+        @rtype:  str
+        @return: the response from the provider
+        """
+        originalProvider = self.url
+        # switch temporarly to next page url
+        self.url = url
+        retVal = self.search('')
+        # bring back url
+        self.url = originalProvider
+        return retVal
