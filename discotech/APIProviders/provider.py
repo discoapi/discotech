@@ -1,3 +1,9 @@
+import sys
+import urllib
+import json
+import time
+
+import discotech.utils
 from discotech.errors import discotechError
 
 __package__ = 'APIProviders'
@@ -248,3 +254,60 @@ class Provider(object):
         return retDict
 
         
+    
+    def refreshOAuth2Token(self):
+	"""
+	tries to refresh the provider oauth2 token
+
+	this applies moslty for google where oauth2 token have to be refreshed every 2 hours
+	"""
+	if self.auth_type_search != 'oauth_2':
+	    raise discotechError('Not a OAuth2 provider')
+
+	#prepare refresh token fields
+
+	postFields = {
+	    'refresh_token' : self.auth_value['oauth2_refresh_token'],
+	    'client_id' : self.auth_value['oauth2_client_id'],
+	    'client_secret' : self.auth_value['oauth2_client_secret'],
+	    'grant_type' : 'refresh_token'
+	}
+
+	if (3, 0) <= sys.version_info:
+	    encodedpostField = urllib.parse.urlencode(postFields)
+	else:
+	    encodedpostField = urllib.urlencode(postFields)
+
+	newToken = discotech.utils.getUrlContents(self.auth_value['oauth2_refresh_token_url'],encodedpostField,
+					{},{'Content-Type': 'application/x-www-form-urlencoded'})
+	
+	#parse the response, this works only with google
+	newToken = json.loads(newToken['response_text'])
+
+	self.auth_value['oauth2_access_token'] = newToken['access_token']
+	self.auth_value['oauth2_token_expire_timestamp'] = int(time.time()) + newToken['expires_in']
+
+
+
+    def search(self,keyword):
+	"""
+	search the provider
+
+	@type  keyword: str
+	@param keyword: the keyword to search for
+
+	@rtype:	 str
+	@return: the response from the provider
+	"""
+	return discotech.utils.provider_query(self,keyword)
+
+
+    
+    def searchUrl(self,url):
+	originalProvider = self.url
+	# switch temporarly to next page url
+	self.url = url
+	retVal = self.search('')
+	# bring back url
+	self.url = originalProvider
+	return retVal
