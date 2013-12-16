@@ -57,7 +57,7 @@ class DiscoAPIParser(object):
         return ParseResults(url_contents['response_text'])
         
 
-    def _updateFromDict(config):
+    def _updateFromDict(self,config):
         self._discoAPIKey = config['api_key']
         self._toCacheResults = config['cache']
         self._returnResults = config['return_results']

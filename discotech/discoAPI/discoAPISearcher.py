@@ -27,6 +27,9 @@ class DiscoAPISearcher(object):
     def search(self,**kwargs):
         """
         search discoAPI using API parametars
+
+	@type  kwargs: packed dict
+	@param kwargs: any discoAPI acceptable argument for more info see https://discoapi.com/docs/search/search.html
         """
 
         if self.__discoAPIKey == "":

@@ -1,3 +1,5 @@
+import json
+
 from .errors import discotechError
 from .APIProviders.provider import Provider
 from .APIProviders.providerSearcher import ProviderSearcher
