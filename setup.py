@@ -3,11 +3,11 @@
 from setuptools import setup
 
 def readme():
-    with open('README.md') as f:
+    with open('README.rst') as f:
         return f.read()
 
 setup(name='discotech',
-      version='0.4',
+      version='0.4.2',
       description='python library to help working with social media providers',
       long_description=readme(),
       author='discoAPI Team',
