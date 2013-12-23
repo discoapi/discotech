@@ -1,3 +1,4 @@
+
 import json
 
 __package__ = 'discotech.discoAPI'
@@ -7,15 +8,15 @@ class ParseResults(object):
     def __init__(self,results):
 
         try:
-	    resultsDict = json.loads(results)
-	    
-	except ValueError:
-	    #print error
-	    print('bad json response: {0}'.format(results))
-	    # face results dict
-	    resultsDict = {'status': 500, 'next_page_url':'done'} 
-	    
-	
+            resultsDict = json.loads(results)
+            
+        except ValueError:
+            #print error
+            print('bad json response: {0}'.format(results))
+            # face results dict
+            resultsDict = {'status': 500, 'next_page_url':'done'} 
+            
+        
         self._status = resultsDict['status']
 
         if self._status == 200:

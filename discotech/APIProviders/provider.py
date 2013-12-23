@@ -177,8 +177,8 @@ class Provider(object):
             except AttributeError:
                 return False
 
-	if self.auth_type_search == 'oauth_2':
-	    return 'oauth2_access_token' in self.auth_value
+        if self.auth_type_search == 'oauth_2':
+            return 'oauth2_access_token' in self.auth_value
                   
     def setOAuth2(self, accessToken , tokenExpireTimestamp = None, clientId = None, clientSecret = None, refreshToken = None, refreshTokenUrl = None):
         """
