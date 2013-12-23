@@ -54,6 +54,9 @@ class DiscoAPIParser(object):
         # response from DiscoAPI
         url_contents = discotech.utils.getUrlContents('https://discoapi.com/api/parse',postData_json)
 
+        if url_contents['failure_message'] != None:
+            raise discotech.discotechError('error connection to discoAPI reason:{0}'.format(url_contents['failure_message']))
+        
         return ParseResults(url_contents['response_text'])
         
 
