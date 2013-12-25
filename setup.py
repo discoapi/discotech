@@ -7,7 +7,7 @@ def readme():
         return f.read()
 
 setup(name='discotech',
-      version='0.4.4',
+      version='0.4.5',
       description='python library to help working with social media providers',
       long_description=readme(),
       author='discoAPI Team',

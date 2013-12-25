@@ -21,7 +21,7 @@ class DiscoAPISearcher(object):
         @param api_key: your discoAPI key
         @type  api_key: str
         """
-        self._discoAPIKey = api_key
+        self.__discoAPIKey = api_key
 
         
     def search(self,**kwargs):
