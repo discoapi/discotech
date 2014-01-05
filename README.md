@@ -4,7 +4,7 @@ discotech
 Connect to multiple social networks easily.This python library makes connecting and authenticating with social media apis easier.
 
 
-Visit out Homepage: https://www.discoapi.com
+Visit our Homepage: https://www.discoapi.com
 
 Find more solutions including:
  - Parsing
