@@ -1,12 +1,22 @@
 discotech
 =========
 
-python library to help dealing with everything regarding social media
-providers
+Connect to multiple social networks easily.This python library makes
+connecting and authenticating with social media apis easier.
 
-homepage: https://www.discoapi.com/discotech
+Visit our Homepage: https://www.discoapi.com
 
-you can find full docs here: https://www.discoapi.com/discotech/docs
+Find more solutions including: - Parsing - Caching - Searching content
+from multiple social media providers.
+
+Full documentation and download statistics here:
+https://www.discoapi.com/discotech
+
+Or you can use our free online generator
+
+https://discoapi.com/docs/bunny-generator.html
+
+Please provide feedback and improve our solutions.
 
 installation
 ============
