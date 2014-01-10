@@ -15,6 +15,15 @@ class TestKeywordManager(unittest.TestCase):
 	testValues.remove('stas')
 	self.assertNotEqual(keywordManager.keywords,testValues)
 
+    def testConvertToSearchPhrases(self):
+        testValues = ['spider man','batman']
+
+        keywordManager = KeywordManager(testValues,True)
+
+        expectedValues = ['spider','man','spiderman','spider_man','batman']
+
+        self.assertEqual(keywordManager.keywords,expectedValues)
+
     def test_dequeue(self):
 
 	testValues = ['stas','hagit','love']

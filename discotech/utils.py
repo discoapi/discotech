@@ -59,7 +59,8 @@ def provider_query(provider, keyword):
 
 	#insert keyword to query
 	providerUrl = _StrReplaceUrlEnconde(providerUrl, '!keyword!', keyword)
-	
+
+        
 	#API Key
 	if provider.auth_type_search == 'api_key':
 		if hasattr(provider, 'auth_value'):
