@@ -47,7 +47,7 @@ class KeywordManager(object):
 	    convertToSearchPhrases = False
 	    if 'search_phrase' in config and config['search_phrase'] is True:
 		convertToSearchPhrases = True
-	    self.keywords = self._keyworsToSearchPhrases(keywords) if convertToSearchPhrases else list(keywords)
+	    self.keywords = self._keyworsToSearchPhrases(config['keywords']) if convertToSearchPhrases else list(config['keywords'])
 	    self._keywordCount = len(self.keywords)
 	    self._headLocation = 0
 	else:
